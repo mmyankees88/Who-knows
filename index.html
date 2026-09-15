@@ -1,0 +1,1113 @@
+<title>Why the Compass Lies</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#E7EBF0;
+  --surface:#FBFCFD;
+  --surface-2:#EFF3F7;
+  --sunk:#DDE4EC;
+  --line:#C7D2DE;
+  --line-soft:#DCE4ED;
+  --line-strong:#93A6BA;
+  --ink:#121B25;
+  --ink-2:#3F4F61;
+  --ink-3:#6B7C8E;
+  --true:#1B5FA8;
+  --true-fill:rgba(27,95,168,.12);
+  --mag:#C2185B;
+  --mag-fill:rgba(194,24,91,.12);
+  --warn:#9A5B00;
+  --warn-fill:rgba(154,91,0,.14);
+  --ok:#2E6B34;
+  --card:#FFFFFF;
+  --shadow:0 1px 2px rgba(18,27,37,.06),0 4px 14px rgba(18,27,37,.05);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0C1117;
+    --surface:#141C25;
+    --surface-2:#1A232E;
+    --sunk:#0F161E;
+    --line:#2A3745;
+    --line-soft:#212C38;
+    --line-strong:#465A6E;
+    --ink:#E3EAF2;
+    --ink-2:#A6B5C5;
+    --ink-3:#7A8A9C;
+    --true:#5292D4;
+    --true-fill:rgba(82,146,212,.16);
+    --mag:#DB4F85;
+    --mag-fill:rgba(219,79,133,.16);
+    --warn:#D69A3C;
+    --warn-fill:rgba(214,154,60,.16);
+    --ok:#6FBF73;
+    --card:#18212B;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.28);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0C1117;
+  --surface:#141C25;
+  --surface-2:#1A232E;
+  --sunk:#0F161E;
+  --line:#2A3745;
+  --line-soft:#212C38;
+  --line-strong:#465A6E;
+  --ink:#E3EAF2;
+  --ink-2:#A6B5C5;
+  --ink-3:#7A8A9C;
+  --true:#5292D4;
+  --true-fill:rgba(82,146,212,.16);
+  --mag:#DB4F85;
+  --mag-fill:rgba(219,79,133,.16);
+  --warn:#D69A3C;
+  --warn-fill:rgba(214,154,60,.16);
+  --ok:#6FBF73;
+  --card:#18212B;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.28);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"IBM Plex Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:15px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:20px;padding-block:0 72px}
+h1,h2,h3{font-family:"IBM Plex Sans Condensed","IBM Plex Sans",sans-serif;text-wrap:balance;margin:0;letter-spacing:-.01em}
+p{margin:0}
+a{color:var(--true)}
+:where(a,button,input,summary):focus-visible{outline:2px solid var(--true);outline-offset:2px;border-radius:3px}
+
+/* ---------- masthead ---------- */
+.masthead{padding-block:52px 34px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:14px;
+}
+h1{font-size:clamp(34px,6.4vw,58px);font-weight:700;line-height:1.02}
+.sub{margin-top:18px;max-width:62ch;font-size:17px;color:var(--ink-2)}
+.key{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:26px}
+.key-item{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--ink-2)}
+.swatch{width:26px;height:4px;border-radius:2px;flex:none}
+.swatch.t{background:var(--true)}
+.swatch.m{background:var(--mag)}
+
+/* ---------- jump nav ---------- */
+nav.jump{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:20;
+  background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  margin-inline:-20px;padding:9px 20px;
+}
+.jump-row{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin}
+.jump-row a{
+  flex:none;text-decoration:none;color:var(--ink-2);
+  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  padding:5px 10px;border:1px solid var(--line);border-radius:999px;background:var(--surface);
+  white-space:nowrap;
+}
+.jump-row a:hover{border-color:var(--line-strong);color:var(--ink)}
+
+/* ---------- taxonomy ---------- */
+.taxonomy{padding-block:44px 8px}
+.section-label{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-3);margin-bottom:12px;
+}
+.taxonomy h2{font-size:27px;font-weight:700}
+.taxonomy .lede{margin-top:12px;max-width:64ch;color:var(--ink-2)}
+.kinds{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:28px}
+.kind{border-top:3px solid var(--line-strong);padding-top:15px}
+.kind.k3{border-top-color:var(--mag)}
+.kind h3{font-size:17px;font-weight:600;margin-bottom:7px}
+.kind p{font-size:14px;color:var(--ink-2)}
+.kind .covers{
+  margin-top:11px;font-family:"IBM Plex Mono",monospace;font-size:11.5px;
+  color:var(--ink-3);letter-spacing:.02em;line-height:1.7;
+}
+
+/* ---------- modules ---------- */
+.module{padding-block:46px;border-top:1px solid var(--line);scroll-margin-top:60px}
+.mod-head{max-width:66ch}
+.mod-kind{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ink-3);
+}
+.module h2{font-size:29px;font-weight:700;margin-top:7px}
+.module .lede{margin-top:12px;color:var(--ink-2);font-size:16px}
+.mod-body{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:26px;margin-top:26px;align-items:start}
+
+.stage{
+  background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:16px;box-shadow:var(--shadow);
+}
+.stage svg{display:block;width:100%;height:auto;max-width:100%;overflow:visible}
+.stage-note{
+  margin-top:11px;font-size:12.5px;color:var(--ink-3);
+  border-top:1px solid var(--line-soft);padding-top:10px;
+}
+
+.panel{display:flex;flex-direction:column;gap:18px}
+
+/* readout */
+.readout{background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:15px 16px}
+.rline{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding-block:5px}
+.rline + .rline{border-top:1px dotted var(--line)}
+.rlabel{
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-3);
+}
+.rval{
+  font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;
+  font-size:21px;font-weight:600;letter-spacing:-.01em;
+}
+.rval.t{color:var(--true)}
+.rval.m{color:var(--mag)}
+.rline.err{margin-top:4px;border-top:1px solid var(--line-strong);padding-top:10px}
+.rval.e{font-size:25px}
+.e-none{color:var(--ok)}
+.e-small{color:var(--warn)}
+.e-big{color:var(--mag)}
+.rsuffix{font-size:12px;font-weight:500;letter-spacing:.06em;margin-left:5px}
+
+/* controls */
+.controls{display:flex;flex-direction:column;gap:15px}
+.ctl-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:5px}
+.ctl-head label{font-size:13.5px;font-weight:500;color:var(--ink-2)}
+.ctl-val{
+  font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;
+  font-size:13px;font-weight:600;color:var(--ink);
+}
+input[type=range]{
+  -webkit-appearance:none;appearance:none;width:100%;background:transparent;margin:0;height:20px;cursor:pointer;
+}
+input[type=range]::-webkit-slider-runnable-track{height:5px;border-radius:3px;background:var(--line);border:none}
+input[type=range]::-moz-range-track{height:5px;border-radius:3px;background:var(--line);border:none}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:17px;height:17px;border-radius:50%;
+  background:var(--surface);border:2.5px solid var(--true);margin-top:-6px;
+  box-shadow:0 1px 3px rgba(0,0,0,.2);
+}
+input[type=range]::-moz-range-thumb{
+  width:17px;height:17px;border-radius:50%;
+  background:var(--surface);border:2.5px solid var(--true);box-shadow:0 1px 3px rgba(0,0,0,.2);
+}
+.ticks{
+  display:flex;justify-content:space-between;
+  font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-3);margin-top:1px;
+}
+
+/* mnemonic */
+.mnemonic{
+  background:var(--mag-fill);border-left:3px solid var(--mag);
+  border-radius:0 8px 8px 0;padding:13px 15px;
+}
+.mnemonic .m-tag{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--mag);font-weight:600;
+}
+.mnemonic p{margin-top:6px;font-size:14px;color:var(--ink-2)}
+.mnemonic b{color:var(--ink);font-weight:600}
+
+.note{font-size:13.5px;color:var(--ink-2)}
+.note b{color:var(--ink);font-weight:600}
+
+/* correction card */
+.corr-card{background:var(--card);border:1px solid var(--line-strong);border-radius:7px;overflow:hidden}
+.corr-card .cc-title{
+  background:var(--surface-2);border-bottom:1px solid var(--line);
+  padding:8px 12px;font-family:"IBM Plex Sans Condensed",sans-serif;
+  font-size:12px;letter-spacing:.09em;text-transform:uppercase;font-weight:600;color:var(--ink-2);
+}
+.cc-scroll{overflow-x:auto}
+table.cc{border-collapse:collapse;width:100%;min-width:330px}
+table.cc th,table.cc td{
+  font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;
+  font-size:12.5px;text-align:center;padding:7px 4px;border-right:1px solid var(--line-soft);
+}
+table.cc th{color:var(--ink-3);font-weight:500;font-size:10.5px;letter-spacing:.07em;background:var(--surface-2)}
+table.cc tr.steer td{color:var(--mag);font-weight:600}
+table.cc th:first-child,table.cc td:first-child{
+  text-align:left;padding-left:12px;color:var(--ink-3);font-size:10.5px;
+  letter-spacing:.07em;font-weight:500;white-space:nowrap;
+}
+table.cc td:last-child,table.cc th:last-child{border-right:none}
+table.cc tr.steer td:first-child{color:var(--ink-3);font-weight:500}
+
+/* cheat sheet */
+.cheat{padding-block:48px 0;border-top:1px solid var(--line);scroll-margin-top:60px}
+.cheat h2{font-size:27px;font-weight:700}
+.cheat .lede{margin-top:11px;color:var(--ink-2);max-width:64ch}
+.sheet-scroll{overflow-x:auto;margin-top:24px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+table.sheet{border-collapse:collapse;width:100%;min-width:720px}
+table.sheet th{
+  text-align:left;font-family:"IBM Plex Mono",monospace;font-size:10.5px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:500;
+  padding:12px 16px;background:var(--surface-2);border-bottom:1px solid var(--line);
+}
+table.sheet td{padding:13px 16px;vertical-align:top;font-size:13.5px;color:var(--ink-2);border-bottom:1px solid var(--line-soft)}
+table.sheet tr:last-child td{border-bottom:none}
+table.sheet td:first-child{color:var(--ink);font-weight:600;white-space:nowrap}
+table.sheet td .mono{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--mag);display:block;margin-top:3px;font-weight:600}
+
+footer{margin-top:46px;padding-top:22px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-3);max-width:66ch}
+footer p + p{margin-top:9px}
+
+@media (max-width:860px){
+  .mod-body{grid-template-columns:1fr}
+  .kinds{grid-template-columns:1fr;gap:22px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms!important;transition-duration:.001ms!important}
+}
+</style>
+
+<div class="wrap">
+
+<header class="masthead">
+  <div class="eyebrow">PHAK Chapter 8 · Flight Instruments · The Magnetic Compass</div>
+  <h1>Why the Compass Lies</h1>
+  <p class="sub">The magnetic compass is the only direction-seeking instrument in the airplane, and it is wrong almost all of the time. Chapter 8 lists six ways it goes wrong. Below, each one is a working instrument you can drive — move the controls and watch the needle disagree with reality.</p>
+  <div class="key">
+    <div class="key-item"><span class="swatch t"></span>Blue — what is actually true</div>
+    <div class="key-item"><span class="swatch m"></span>Magenta — what the compass indicates</div>
+  </div>
+</header>
+
+<nav class="jump">
+  <div class="jump-row">
+    <a href="#variation">1 · Variation</a>
+    <a href="#deviation">2 · Deviation</a>
+    <a href="#dip">3 · Magnetic dip</a>
+    <a href="#turning">4 · Turning error</a>
+    <a href="#accel">5 · Acceleration</a>
+    <a href="#oscillation">6 · Oscillation</a>
+    <a href="#cheat">Cheat sheet</a>
+  </div>
+</nav>
+
+<section class="taxonomy">
+  <div class="section-label">Start here</div>
+  <h2>Six errors, but only three reasons</h2>
+  <p class="lede">The list is easier to hold onto once you notice the six errors aren't six separate facts. They come from three different things going wrong, and the last reason alone accounts for half the list.</p>
+  <div class="kinds">
+    <div class="kind k1">
+      <h3>North isn't where the map says</h3>
+      <p>The Earth's magnetic pole isn't at the geographic pole, so the needle and your chart's north disagree. Nothing is broken — you just have to do the arithmetic.</p>
+      <div class="covers">→ Variation</div>
+    </div>
+    <div class="kind k2">
+      <h3>Your airplane is magnetic</h3>
+      <p>Radios, wiring, engine steel and speakers all make their own magnetic fields, and the compass is sitting right in the middle of them.</p>
+      <div class="covers">→ Deviation</div>
+    </div>
+    <div class="kind k3">
+      <h3>The field points down, not along</h3>
+      <p>Away from the equator the field dives into the ground and drags the card down with it. That single fact causes the entire rest of the list — it's the one worth actually understanding.</p>
+      <div class="covers">→ Magnetic dip<br>→ Northerly turning error<br>→ Acceleration error<br>→ Oscillation</div>
+    </div>
+  </div>
+</section>
+
+<!-- 1 · VARIATION -->
+<section class="module" id="variation">
+  <div class="mod-head">
+    <div class="mod-kind">Error 1 · North isn't where the map says</div>
+    <h2>Variation</h2>
+    <p class="lede">True north is the geographic pole your chart is drawn around. Magnetic north is where the needle actually points, roughly 1,200 miles away. <b>Variation</b> is the angle between them — and it depends entirely on where you're standing.</p>
+  </div>
+  <div class="mod-body">
+    <div class="stage">
+      <svg id="varSvg" viewBox="0 0 560 400" role="img" aria-labelledby="varTitle">
+        <title id="varTitle">Isogonic lines across the continental United States with a compass rose showing true and magnetic north</title>
+      </svg>
+      <p class="stage-note">The dashed magenta lines are <b>isogonic lines</b> — every point on one has the same variation. The bold one through the middle is the <b>agonic line</b>, where variation is zero and the compass tells the truth for once.</p>
+    </div>
+    <div class="panel">
+      <div class="controls">
+        <div>
+          <div class="ctl-head"><label for="varPos">Where you are</label><span class="ctl-val" id="varPosVal">Kansas</span></div>
+          <input type="range" id="varPos" min="0" max="100" value="18" aria-describedby="varPosVal">
+          <div class="ticks"><span>West coast</span><span>East coast</span></div>
+        </div>
+        <div>
+          <div class="ctl-head"><label for="varCourse">True course you want to fly</label><span class="ctl-val" id="varCourseVal">090°</span></div>
+          <input type="range" id="varCourse" min="0" max="359" value="90">
+          <div class="ticks"><span>000°</span><span>359°</span></div>
+        </div>
+      </div>
+      <div class="readout">
+        <div class="rline"><span class="rlabel">Variation here</span><span class="rval m" id="varAmt">—</span></div>
+        <div class="rline"><span class="rlabel">True course</span><span class="rval t" id="varTC">090°</span></div>
+        <div class="rline err"><span class="rlabel">Magnetic course to fly</span><span class="rval m e" id="varMC">—</span></div>
+      </div>
+      <div class="mnemonic">
+        <div class="m-tag">East is least, west is best</div>
+        <p id="varRule">—</p>
+      </div>
+      <p class="note">This is the one error on the list you correct on the ground with arithmetic, not in the air with technique. It doesn't care about your heading, your speed, or your bank — only your position.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 2 · DEVIATION -->
+<section class="module" id="deviation">
+  <div class="mod-head">
+    <div class="mod-kind">Error 2 · Your airplane is magnetic</div>
+    <h2>Deviation</h2>
+    <p class="lede">Metal and current in the airframe bend the field before it ever reaches the compass. Unlike variation, deviation is <b>different on every heading</b> — because as the airplane turns, its own magnetic junk swings around relative to magnetic north.</p>
+  </div>
+  <div class="mod-body">
+    <div class="stage">
+      <svg id="devSvg" viewBox="0 0 560 340" role="img" aria-labelledby="devTitle">
+        <title id="devTitle">Plan view of an aircraft with a draggable magnetic source deflecting the compass needle</title>
+      </svg>
+      <p class="stage-note"><b>Drag the handheld radio</b> anywhere in the cockpit — or focus it and use the arrow keys. Watch the needle chase it, and watch the correction card rebuild itself.</p>
+    </div>
+    <div class="panel">
+      <div class="controls">
+        <div>
+          <div class="ctl-head"><label for="devStrength">How magnetic the radio is</label><span class="ctl-val" id="devStrengthVal">medium</span></div>
+          <input type="range" id="devStrength" min="0" max="100" value="55">
+          <div class="ticks"><span>off</span><span>strong</span></div>
+        </div>
+        <div>
+          <div class="ctl-head"><label for="devHdg">Aircraft magnetic heading</label><span class="ctl-val" id="devHdgVal">000°</span></div>
+          <input type="range" id="devHdg" min="0" max="359" value="0">
+          <div class="ticks"><span>N</span><span>E</span><span>S</span><span>W</span><span></span></div>
+        </div>
+      </div>
+      <div class="readout">
+        <div class="rline"><span class="rlabel">Magnetic heading</span><span class="rval t" id="devMH">000°</span></div>
+        <div class="rline"><span class="rlabel">Compass reads</span><span class="rval m" id="devCH">000°</span></div>
+        <div class="rline err"><span class="rlabel">Deviation on this heading</span><span class="rval e" id="devErr">0°</span></div>
+      </div>
+      <div class="corr-card">
+        <div class="cc-title">Compass correction card</div>
+        <div class="cc-scroll">
+          <table class="cc" id="devCard"><tbody></tbody></table>
+        </div>
+      </div>
+      <p class="note">This is the card screwed to the panel under the compass in every airplane you'll fly. A mechanic swings the compass on a compass rose, measures the error every 30°, and writes down what to <b>steer</b> to actually get the heading you want. It is only valid for that airplane, with that equipment, in that configuration.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3 · DIP -->
+<section class="module" id="dip">
+  <div class="mod-head">
+    <div class="mod-kind">Error 3 · The field points down — this one causes the rest</div>
+    <h2>Magnetic dip</h2>
+    <p class="lede">Lines of flux leave the Earth near the south pole and re-enter near the north pole. Only at the magnetic equator do they run flat along the surface. Everywhere else they angle <b>into the ground</b>, and the compass card — free to tip on its pivot — tries to follow them down.</p>
+  </div>
+  <div class="mod-body">
+    <div class="stage">
+      <svg id="dipSvg" viewBox="0 0 560 360" role="img" aria-labelledby="dipTitle">
+        <title id="dipTitle">Cross-section of the Earth showing magnetic flux lines and the local field angle at a chosen latitude</title>
+      </svg>
+      <p class="stage-note">The blue arrow is the <b>horizontal</b> part of the field — the only part that can actually turn the card toward north. The magenta arrow is the <b>vertical</b> part, which does nothing useful and causes errors 4, 5 and 6.</p>
+    </div>
+    <div class="panel">
+      <div class="controls">
+        <div>
+          <div class="ctl-head"><label for="dipLat">Your latitude</label><span class="ctl-val" id="dipLatVal">40° N</span></div>
+          <input type="range" id="dipLat" min="0" max="80" value="40">
+          <div class="ticks"><span>0° equator</span><span>80° arctic</span></div>
+        </div>
+      </div>
+      <div class="readout">
+        <div class="rline"><span class="rlabel">Dip angle below horizontal</span><span class="rval m" id="dipAngle">—</span></div>
+        <div class="rline"><span class="rlabel">Field doing useful work</span><span class="rval t" id="dipHoriz">—</span></div>
+      </div>
+      <div id="dipBarWrap">
+        <div class="section-label" style="margin-bottom:7px">How the field splits here</div>
+        <svg id="dipBar" viewBox="0 0 400 46" role="img" aria-label="Split of the magnetic field into horizontal and vertical components"></svg>
+      </div>
+      <p class="note" style="font-size:12.5px;color:var(--ink-3);margin-top:-6px">Each bar is that component as a share of the <em>total</em> field strength. They don't add up to 100% — the two pull at right angles to each other.</p>
+      <p class="note" id="dipVerdict">—</p>
+      <div class="mnemonic">
+        <div class="m-tag">The key link</div>
+        <p>Dip isn't really a reading error by itself — it's the <b>mechanism</b>. Because the card hangs tipped, anything that pushes the airplane around (banking, accelerating, turbulence) shoves the tipped card sideways and spins it. Set the slider to <b>0°</b> and the next two errors vanish completely.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · TURNING -->
+<section class="module" id="turning">
+  <div class="mod-head">
+    <div class="mod-kind">Error 4 · Caused by dip</div>
+    <h2>Northerly turning error</h2>
+    <p class="lede">Roll into a bank and the tipped card gets flung outward by the turn. Near <b>north</b> the compass lags behind the airplane — it briefly shows a turn the <em>wrong way</em>. Near <b>south</b> it races ahead. On east and west it's honest.</p>
+  </div>
+  <div class="mod-body">
+    <div class="stage">
+      <svg id="turnSvg" viewBox="0 0 560 330" role="img" aria-labelledby="turnTitle">
+        <title id="turnTitle">Compass card showing indicated heading against actual heading while banked</title>
+      </svg>
+      <p class="stage-note">The magenta number under the lubber line is what you'd read. The blue tick is where the card <em>should</em> be sitting. The shaded wedge between them is the error.</p>
+    </div>
+    <div class="panel">
+      <div class="controls">
+        <div>
+          <div class="ctl-head"><label for="turnHdg">Actual heading</label><span class="ctl-val" id="turnHdgVal">355°</span></div>
+          <input type="range" id="turnHdg" min="0" max="359" value="355">
+          <div class="ticks"><span>N</span><span>E</span><span>S</span><span>W</span><span>N</span></div>
+        </div>
+        <div>
+          <div class="ctl-head"><label for="turnBank">Bank</label><span class="ctl-val" id="turnBankVal">20° right</span></div>
+          <input type="range" id="turnBank" min="-30" max="30" value="20">
+          <div class="ticks"><span>30° left</span><span>level</span><span>30° right</span></div>
+        </div>
+        <div>
+          <div class="ctl-head"><label for="turnLat">Latitude</label><span class="ctl-val" id="turnLatVal">40° N</span></div>
+          <input type="range" id="turnLat" min="0" max="70" value="40">
+          <div class="ticks"><span>0°</span><span>70°</span></div>
+        </div>
+      </div>
+      <div class="readout">
+        <div class="rline"><span class="rlabel">Actual heading</span><span class="rval t" id="turnAct">355°</span></div>
+        <div class="rline"><span class="rlabel">Compass reads</span><span class="rval m" id="turnInd">—</span></div>
+        <div class="rline err"><span class="rlabel">Error</span><span class="rval e" id="turnErr">—</span></div>
+      </div>
+      <div>
+        <div class="section-label" style="margin-bottom:7px">Error at every heading — drag to scrub</div>
+        <svg id="turnPlot" viewBox="0 0 400 150" role="img" aria-label="Compass error plotted against heading, largest at north and south, zero at east and west"></svg>
+      </div>
+      <div class="mnemonic">
+        <div class="m-tag">UNOS</div>
+        <p><b>U</b>ndershoot <b>N</b>orth, <b>O</b>vershoot <b>S</b>outh. Rolling out on a northerly heading, stop the turn <em>early</em>; on a southerly heading, carry it <em>past</em>. How much? Roughly your latitude in degrees — about <b id="turnRule">40°</b> here.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 · ACCELERATION -->
+<section class="module" id="accel">
+  <div class="mod-head">
+    <div class="mod-kind">Error 5 · Also caused by dip</div>
+    <h2>Acceleration error</h2>
+    <p class="lede">Same tipped card, different shove. Change speed on an <b>east or west</b> heading and the card's weight lags behind, twisting it into a turn that isn't happening. On north and south headings there's nothing to twist.</p>
+  </div>
+  <div class="mod-body">
+    <div class="stage">
+      <svg id="accSvg" viewBox="0 0 560 330" role="img" aria-labelledby="accTitle">
+        <title id="accTitle">Compass card showing a false turn indication while accelerating on an easterly heading</title>
+      </svg>
+      <p class="stage-note">Nothing here is turning. The airplane's wings are level and the heading is constant — the card is moving purely because the airspeed is changing.</p>
+    </div>
+    <div class="panel">
+      <div class="controls">
+        <div>
+          <div class="ctl-head"><label for="accHdg">Heading</label><span class="ctl-val" id="accHdgVal">090°</span></div>
+          <input type="range" id="accHdg" min="0" max="359" value="90">
+          <div class="ticks"><span>N</span><span>E</span><span>S</span><span>W</span><span>N</span></div>
+        </div>
+        <div>
+          <div class="ctl-head"><label for="accRate">Throttle</label><span class="ctl-val" id="accRateVal">accelerating</span></div>
+          <input type="range" id="accRate" min="-100" max="100" value="70">
+          <div class="ticks"><span>decelerating</span><span>steady</span><span>accelerating</span></div>
+        </div>
+        <div>
+          <div class="ctl-head"><label for="accLat">Latitude</label><span class="ctl-val" id="accLatVal">40° N</span></div>
+          <input type="range" id="accLat" min="0" max="70" value="40">
+          <div class="ticks"><span>0°</span><span>70°</span></div>
+        </div>
+      </div>
+      <div class="readout">
+        <div class="rline"><span class="rlabel">Actual heading</span><span class="rval t" id="accAct">090°</span></div>
+        <div class="rline"><span class="rlabel">Compass reads</span><span class="rval m" id="accInd">—</span></div>
+        <div class="rline err"><span class="rlabel">False turn shown</span><span class="rval e" id="accErr">—</span></div>
+      </div>
+      <div>
+        <div class="section-label" style="margin-bottom:7px">Error at every heading — drag to scrub</div>
+        <svg id="accPlot" viewBox="0 0 400 150" role="img" aria-label="Compass error plotted against heading, largest at east and west, zero at north and south"></svg>
+      </div>
+      <div class="mnemonic">
+        <div class="m-tag">ANDS</div>
+        <p><b>A</b>ccelerate <b>N</b>orth, <b>D</b>ecelerate <b>S</b>outh. Speed up and the compass swings toward north; slow down and it swings toward south — no matter which of the two headings you're on. Notice the curve is the exact mirror of the last one: this error peaks where turning error is zero.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 · OSCILLATION -->
+<section class="module" id="oscillation">
+  <div class="mod-head">
+    <div class="mod-kind">Error 6 · All of the above, at once</div>
+    <h2>Oscillation</h2>
+    <p class="lede">Turbulence doesn't introduce a new kind of error — it just applies errors 4 and 5 repeatedly, in random directions, several times a second. The card never settles, and the number under the lubber line becomes something you have to average by eye.</p>
+  </div>
+  <div class="mod-body">
+    <div class="stage">
+      <svg id="oscSvg" viewBox="0 0 560 330" role="img" aria-labelledby="oscTitle">
+        <title id="oscTitle">Compass card swinging back and forth in turbulence around a steady actual heading</title>
+      </svg>
+      <p class="stage-note">The faint magenta band is the full sweep the card is covering. Your eye has to find the middle of it.</p>
+    </div>
+    <div class="panel">
+      <div class="controls">
+        <div>
+          <div class="ctl-head"><label for="oscTurb">Turbulence</label><span class="ctl-val" id="oscTurbVal">light chop</span></div>
+          <input type="range" id="oscTurb" min="0" max="100" value="45">
+          <div class="ticks"><span>smooth</span><span>moderate</span><span>severe</span></div>
+        </div>
+      </div>
+      <div class="readout">
+        <div class="rline"><span class="rlabel">Actual heading</span><span class="rval t">270°</span></div>
+        <div class="rline"><span class="rlabel">Compass reads right now</span><span class="rval m" id="oscInd">—</span></div>
+        <div class="rline err"><span class="rlabel">Swinging through</span><span class="rval e" id="oscSwing">—</span></div>
+      </div>
+      <p class="note">This is why you don't chase the compass. In anything but smooth air you set the heading indicator against the compass during <b>straight, level, unaccelerated flight</b> — the one condition where every error on this page except variation and deviation is guaranteed to be zero — and then fly the heading indicator instead.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CHEAT SHEET -->
+<section class="cheat" id="cheat">
+  <div class="section-label">Take this to the checkride</div>
+  <h2>The whole list on one page</h2>
+  <p class="lede">If the list you were given was <b>VDMONA</b> — Variation, Deviation, Magnetic dip, Oscillation, Northerly turning, Acceleration — these are those six, in the order the mnemonic spells them.</p>
+  <div class="sheet-scroll">
+    <table class="sheet">
+      <thead>
+        <tr><th>Error</th><th>What actually causes it</th><th>When it bites</th><th>What you do about it</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Variation</td>
+          <td>Magnetic north isn't at the geographic pole.</td>
+          <td>Always. Depends only on <em>where</em> you are.</td>
+          <td>Arithmetic on the ground.<span class="mono">East is least, west is best</span></td>
+        </tr>
+        <tr>
+          <td>Deviation</td>
+          <td>The airplane's own metal and electrical fields.</td>
+          <td>Always, and differently on every heading.</td>
+          <td>Read the compass correction card on the panel.</td>
+        </tr>
+        <tr>
+          <td>Magnetic dip</td>
+          <td>Flux lines angle into the ground away from the equator.</td>
+          <td>Everywhere but the magnetic equator; worse toward the poles.</td>
+          <td>Nothing directly — but know it's the engine behind the next three.</td>
+        </tr>
+        <tr>
+          <td>Oscillation</td>
+          <td>Turbulence applying the dip errors erratically.</td>
+          <td>Rough air.</td>
+          <td>Average the swing; set the heading indicator in smooth, level flight.</td>
+        </tr>
+        <tr>
+          <td>Northerly turning</td>
+          <td>Dip + the bank in a turn.</td>
+          <td>Turning through north or south. Zero on east/west.</td>
+          <td>Lead or lag rollout by about your latitude.<span class="mono">UNOS — Undershoot North, Overshoot South</span></td>
+        </tr>
+        <tr>
+          <td>Acceleration</td>
+          <td>Dip + a change in airspeed.</td>
+          <td>Speeding up or slowing down on east/west. Zero on north/south.</td>
+          <td>Don't believe it until the speed is steady.<span class="mono">ANDS — Accelerate North, Decelerate South</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <footer>
+    <p>Follows the magnetic compass section of the FAA <em>Pilot's Handbook of Aeronautical Knowledge</em> (FAA-H-8083-25), Chapter 8, Flight Instruments.</p>
+    <p>The instruments above are teaching models, not avionics. They reproduce the shape, sign and rough magnitude of each error — where it peaks, where it vanishes, which way it swings — using the standard rules of thumb. Real deviation depends on the specific airframe, and real lead/lag depends on bank and rate as well as latitude. Use them to build the intuition, then trust the correction card in the airplane.</p>
+  </footer>
+</section>
+
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- geometry helpers ---------- */
+function polar(cx,cy,r,deg){var a=(deg-90)*Math.PI/180;return{x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)};}
+function n360(d){d=d%360;return d<0?d+360:d;}
+function n180(d){d=n360(d);return d>180?d-360:d;}
+function deg3(d){var v=Math.round(n360(d))%360;return ("00"+v).slice(-3);}
+function f(n){return (Math.round(n*100)/100);}
+function arcPath(cx,cy,r,a0,a1){
+  var p0=polar(cx,cy,r,a0),p1=polar(cx,cy,r,a1),d=a1-a0;
+  return "M "+f(p0.x)+" "+f(p0.y)+" A "+r+" "+r+" 0 "+(Math.abs(d)>180?1:0)+" "+(d>0?1:0)+" "+f(p1.x)+" "+f(p1.y);
+}
+function wedge(cx,cy,r0,r1,a0,a1){
+  var o0=polar(cx,cy,r1,a0),o1=polar(cx,cy,r1,a1),i1=polar(cx,cy,r0,a1),i0=polar(cx,cy,r0,a0);
+  var lg=Math.abs(a1-a0)>180?1:0, sw=a1>a0?1:0;
+  return "M "+f(o0.x)+" "+f(o0.y)+" A "+r1+" "+r1+" 0 "+lg+" "+sw+" "+f(o1.x)+" "+f(o1.y)+
+         " L "+f(i1.x)+" "+f(i1.y)+" A "+r0+" "+r0+" 0 "+lg+" "+(sw?0:1)+" "+f(i0.x)+" "+f(i0.y)+" Z";
+}
+var MONO="font-family:'IBM Plex Mono',ui-monospace,monospace;";
+var COND="font-family:'IBM Plex Sans Condensed',sans-serif;";
+function lbl(x,y,t,o){o=o||{};
+  return '<text x="'+f(x)+'" y="'+f(y)+'" text-anchor="'+(o.anchor||"middle")+'" dominant-baseline="'+(o.base||"central")+
+    '" style="'+(o.mono===false?COND:MONO)+'font-size:'+(o.size||10)+'px;font-weight:'+(o.weight||500)+
+    ';letter-spacing:'+(o.ls||".08em")+';fill:'+(o.fill||"var(--ink-3)")+';'+(o.extra||"")+'">'+t+'</text>';
+}
+function sev(e){e=Math.abs(e);return e<1?"var(--ok)":(e<10?"var(--warn)":"var(--mag)");}
+function sevClass(e){e=Math.abs(e);return e<1?"e-none":(e<10?"e-small":"e-big");}
+function $(id){return document.getElementById(id);}
+var REDUCED=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- shared compass rose ---------- */
+var CARD_LBL={0:"N",30:"3",60:"6",90:"E",120:"12",150:"15",180:"S",210:"21",240:"24",270:"W",300:"30",330:"33"};
+function roseFace(cx,cy,r){
+  var s='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" style="fill:var(--surface);stroke:none"/>';
+  for(var d=0;d<360;d+=5){
+    var major=d%30===0, mid=d%10===0, len=major?14:(mid?9:5);
+    var p1=polar(cx,cy,r-2,d),p2=polar(cx,cy,r-2-len,d);
+    s+='<line x1="'+f(p1.x)+'" y1="'+f(p1.y)+'" x2="'+f(p2.x)+'" y2="'+f(p2.y)+
+       '" style="stroke:var(--ink-2);stroke-width:'+(major?2:1)+';opacity:'+(major?.95:(mid?.6:.35))+'" stroke-linecap="round"/>';
+  }
+  for(var k in CARD_LBL){
+    var t=CARD_LBL[k], big=(t==="N"||t==="E"||t==="S"||t==="W");
+    var p=polar(cx,cy,r-34,+k);
+    s+='<text x="'+f(p.x)+'" y="'+f(p.y)+'" text-anchor="middle" dominant-baseline="central" transform="rotate('+k+' '+f(p.x)+' '+f(p.y)+')"'+
+       ' style="'+COND+'font-size:'+(big?20:16)+'px;font-weight:700;fill:'+(t==="N"?"var(--mag)":"var(--ink)")+'">'+t+'</text>';
+  }
+  return s;
+}
+/* full instrument: rotating card + fixed case + lubber line + actual-heading index */
+function compass(cx,cy,r,actual,indicated,opts){
+  opts=opts||{};
+  var err=n180(indicated-actual), gap=n180(actual-indicated);
+  var s='';
+  s+='<circle cx="'+cx+'" cy="'+cy+'" r="'+(r+14)+'" style="fill:var(--sunk);stroke:var(--line-strong);stroke-width:2"/>';
+  s+='<g transform="rotate('+f(-indicated)+' '+cx+' '+cy+')">'+roseFace(cx,cy,r)+'</g>';
+  s+='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" style="fill:none;stroke:var(--line);stroke-width:1"/>';
+  /* error wedge between lubber line and where the card should be */
+  if(Math.abs(gap)>0.6){
+    s+='<path d="'+wedge(cx,cy,r+2,r+13,0,gap)+'" style="fill:'+sev(err)+';opacity:.3"/>';
+  }
+  /* blue index: where the card WOULD sit with no error */
+  var bp=polar(cx,cy,r+14,gap), bi=polar(cx,cy,r-4,gap);
+  s+='<line x1="'+f(bi.x)+'" y1="'+f(bi.y)+'" x2="'+f(bp.x)+'" y2="'+f(bp.y)+'" style="stroke:var(--true);stroke-width:3" stroke-linecap="round"/>';
+  if(Math.abs(gap)>13){
+    var bt=polar(cx,cy,r+30,gap);
+    s+=lbl(bt.x,bt.y,"ACTUAL",{size:9,fill:"var(--true)",weight:600});
+  }
+  /* lubber line (fixed, top) */
+  s+='<path d="M '+cx+' '+(cy-r-16)+' l -9 -13 l 18 0 Z" style="fill:var(--mag)"/>';
+  s+='<line x1="'+cx+'" y1="'+(cy-r-14)+'" x2="'+cx+'" y2="'+(cy-r+26)+'" style="stroke:var(--mag);stroke-width:2.5" stroke-linecap="round"/>';
+  s+=lbl(cx,cy-r-38,"COMPASS READS "+deg3(indicated)+"°",{size:11,fill:"var(--mag)",weight:600});
+  /* pivot */
+  s+='<circle cx="'+cx+'" cy="'+cy+'" r="5" style="fill:var(--ink-3)"/>';
+  return s;
+}
+/* rear-view aircraft, banked */
+function acRear(cx,cy,bank,scale){
+  scale=scale||1;
+  return '<g transform="translate('+cx+','+cy+') rotate('+f(bank)+') scale('+scale+')">'+
+    '<line x1="-52" y1="0" x2="52" y2="0" style="stroke:var(--ink-2);stroke-width:7" stroke-linecap="round"/>'+
+    '<line x1="-16" y1="-22" x2="16" y2="-22" style="stroke:var(--ink-2);stroke-width:5" stroke-linecap="round"/>'+
+    '<line x1="0" y1="-24" x2="0" y2="2" style="stroke:var(--ink-2);stroke-width:4" stroke-linecap="round"/>'+
+    '<circle cx="0" cy="0" r="11" style="fill:var(--surface);stroke:var(--ink-2);stroke-width:4"/>'+
+  '</g>';
+}
+/* side-view aircraft */
+function acSide(cx,cy,scale){
+  scale=scale||1;
+  return '<g transform="translate('+cx+','+cy+') scale('+scale+')">'+
+    '<path d="M -54 0 L -30 -9 L 22 -10 L 46 -2 L 46 4 L 10 9 L -34 8 Z" style="fill:var(--surface);stroke:var(--ink-2);stroke-width:3" stroke-linejoin="round"/>'+
+    '<path d="M -54 0 L -44 -24 L -30 -22 L -30 -8 Z" style="fill:var(--ink-2);opacity:.45"/>'+
+    '<line x1="-6" y1="7" x2="-6" y2="20" style="stroke:var(--ink-2);stroke-width:3"/>'+
+    '<circle cx="-6" cy="23" r="5" style="fill:var(--ink-2)"/>'+
+    '<circle cx="34" cy="21" r="4" style="fill:var(--ink-2)"/>'+
+    '<line x1="34" y1="4" x2="34" y2="18" style="stroke:var(--ink-2);stroke-width:3"/>'+
+  '</g>';
+}
+
+/* ================= 1 · VARIATION ================= */
+(function(){
+  var svg=$("varSvg"), posEl=$("varPos"), crsEl=$("varCourse");
+  var X0=42,X1=518,YT=44,YB=150;
+  var PLACES=[[0.08,"Pacific coast"],[0.20,"Nevada &amp; Utah"],[0.34,"Colorado"],[0.46,"Kansas"],
+              [0.58,"Missouri"],[0.70,"Ohio valley"],[0.84,"Appalachians"],[1.01,"New England"]];
+  function varAt(p){return 15-29*p;}
+  function placeAt(p){for(var i=0;i<PLACES.length;i++){if(p<PLACES[i][0])return PLACES[i][1];}return "New England";}
+  function render(){
+    var p=+posEl.value/100, v=varAt(p), tc=+crsEl.value, mc=n360(tc-v);
+    var s='';
+    s+='<rect x="'+X0+'" y="'+YT+'" width="'+(X1-X0)+'" height="'+(YB-YT)+'" rx="4" style="fill:var(--surface-2);stroke:var(--line)"/>';
+    s+=lbl(X0,YT-16,"WEST",{anchor:"start",size:10});
+    s+=lbl(X1,YT-16,"EAST",{anchor:"end",size:10});
+    s+=lbl((X0+X1)/2,YT-16,"CONTINENTAL U.S., WEST TO EAST",{size:10});
+    [15,10,5,0,-5,-10].forEach(function(vv){
+      var pp=(15-vv)/29, x=X0+(X1-X0)*pp, ag=(vv===0);
+      s+='<line x1="'+f(x)+'" y1="'+YT+'" x2="'+f(x)+'" y2="'+YB+'" style="stroke:var(--mag);stroke-width:'+(ag?2.5:1.5)+
+         ';opacity:'+(ag?.95:.55)+'" stroke-dasharray="'+(ag?"none":"5 4")+'"/>';
+      s+=lbl(x,YB+15,ag?"0° AGONIC":(Math.abs(vv)+"°"+(vv>0?"E":"W")),{size:10,fill:ag?"var(--mag)":"var(--ink-3)",weight:ag?600:500});
+    });
+    var ax=X0+(X1-X0)*p;
+    s+='<g transform="translate('+f(ax)+','+((YT+YB)/2)+') rotate(90) scale(.52)">'+
+       '<path d="M 0 -46 L 6 -28 L 6 -10 L 44 2 L 44 11 L 6 19 L 6 34 L 15 43 L 15 49 L 0 45 L -15 49 L -15 43 L -6 34 L -6 19 L -44 11 L -44 2 L -6 -10 L -6 -28 Z"'+
+       ' style="fill:var(--true);stroke:var(--surface);stroke-width:3" stroke-linejoin="round"/></g>';
+    /* compass rose comparing true and magnetic north */
+    var cx=280, cy=276, r=58;
+    s+='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" style="fill:var(--surface);stroke:var(--line);stroke-width:1.5"/>';
+    if(Math.abs(v)>0.4) s+='<path d="'+wedge(cx,cy,r-13,r-2,0,v)+'" style="fill:var(--mag);opacity:.3"/>';
+    var tp=polar(cx,cy,r+4,0), mp=polar(cx,cy,r+4,v), LY=cy-r-28;
+    s+='<line x1="'+cx+'" y1="'+cy+'" x2="'+f(tp.x)+'" y2="'+f(tp.y)+'" style="stroke:var(--true);stroke-width:3.5" stroke-linecap="round"/>';
+    s+='<line x1="'+cx+'" y1="'+cy+'" x2="'+f(mp.x)+'" y2="'+f(mp.y)+'" style="stroke:var(--mag);stroke-width:3.5" stroke-linecap="round"/>';
+    /* the two arrows are always near-vertical, so label them out to either side with leaders */
+    s+='<polyline points="'+(cx-72)+','+LY+' '+(cx-34)+','+LY+' '+f(tp.x)+','+f(tp.y)+'" style="fill:none;stroke:var(--true);stroke-width:1;opacity:.55"/>';
+    s+=lbl(cx-76,LY,"TRUE NORTH",{size:10,fill:"var(--true)",weight:600,anchor:"end"});
+    s+='<polyline points="'+(cx+72)+','+LY+' '+(cx+34)+','+LY+' '+f(mp.x)+','+f(mp.y)+'" style="fill:none;stroke:var(--mag);stroke-width:1;opacity:.55"/>';
+    s+=lbl(cx+76,LY,"MAGNETIC",{size:10,fill:"var(--mag)",weight:600,anchor:"start"});
+    s+='<circle cx="'+cx+'" cy="'+cy+'" r="4" style="fill:var(--ink-2)"/>';
+    s+=lbl(cx,cy+r+26,placeAt(p).toUpperCase(),{size:11,fill:"var(--ink-2)",weight:600});
+    svg.innerHTML=svg.querySelector("title").outerHTML+s;
+
+    var vr=Math.round(v);
+    $("varPosVal").innerHTML=placeAt(p);
+    $("varCourseVal").textContent=deg3(tc)+"°";
+    $("varAmt").textContent=vr===0?"0°":(Math.abs(vr)+"°"+(vr>0?"E":"W"));
+    $("varTC").textContent=deg3(tc)+"°";
+    $("varMC").textContent=deg3(mc)+"°";
+    $("varRule").innerHTML = vr===0
+      ? "You're standing on the agonic line. True and magnetic are <b>identical</b> here — the only place on the map where you can skip the arithmetic."
+      : (vr>0
+        ? "Variation is <b>"+Math.abs(vr)+"°East</b>, so east is least — <b>subtract</b> it. "+deg3(tc)+"° true &minus; "+Math.abs(vr)+"° = <b>"+deg3(mc)+"° magnetic</b>."
+        : "Variation is <b>"+Math.abs(vr)+"°West</b>, so west is best — <b>add</b> it. "+deg3(tc)+"° true + "+Math.abs(vr)+"° = <b>"+deg3(mc)+"° magnetic</b>.");
+  }
+  posEl.addEventListener("input",render); crsEl.addEventListener("input",render); render();
+})();
+
+/* ================= 2 · DEVIATION ================= */
+(function(){
+  var svg=$("devSvg"), strEl=$("devStrength"), hdgEl=$("devHdg");
+  var CX=280, CY=112;                 /* compass location in the panel */
+  var puck={bearing:118, dist:96};    /* position of the offending radio, relative to the nose */
+  var dragging=false;
+
+  function pull(){ var s=+strEl.value/100; return Math.min(0.62, s*1400/(puck.dist*puck.dist)); }
+  /* needle bearing in earth frame, given aircraft heading */
+  function needle(hdg){
+    var m=pull(), a=(hdg+puck.bearing)*Math.PI/180;
+    return Math.atan2(m*Math.sin(a), 1+m*Math.cos(a))*180/Math.PI;
+  }
+  function render(){
+    var hdg=+hdgEl.value, n=needle(hdg), dev=n, ch=n360(hdg-n);
+    var s='';
+    /* cabin area */
+    s+='<rect x="150" y="34" width="260" height="286" rx="70" style="fill:var(--surface-2);stroke:var(--line);stroke-dasharray:5 5"/>';
+    s+=lbl(280,326,"CABIN — DRAG THE RADIO",{size:9.5});
+    /* aircraft plan view, nose up */
+    s+='<g transform="translate(280,186) scale(1.25)" style="opacity:.5">'+
+       '<path d="M 0 -84 L 8 -60 L 8 -22 L 78 -2 L 78 12 L 8 26 L 8 58 L 24 74 L 24 84 L 0 78 L -24 84 L -24 74 L -8 58 L -8 26 L -78 12 L -78 -2 L -8 -22 L -8 -60 Z"'+
+       ' style="fill:var(--sunk);stroke:var(--line-strong);stroke-width:2" stroke-linejoin="round"/></g>';
+    /* magnetic north reference (blue) and the deflected needle (magenta) */
+    var NL=74;
+    var np=polar(CX,CY,NL,-hdg), nt=polar(CX,CY,NL+20,-hdg);
+    s+='<line x1="'+CX+'" y1="'+CY+'" x2="'+f(np.x)+'" y2="'+f(np.y)+'" style="stroke:var(--true);stroke-width:3;opacity:.85" stroke-dasharray="6 4" stroke-linecap="round"/>';
+    s+=lbl(nt.x-9,nt.y-7,"MAG NORTH",{size:9,fill:"var(--true)",weight:600,anchor:"end"});
+    if(Math.abs(dev)>0.5) s+='<path d="'+wedge(CX,CY,NL-24,NL-12,-hdg,n-hdg)+'" style="fill:'+sev(dev)+';opacity:.38"/>';
+    var dp=polar(CX,CY,NL,n-hdg), dt=polar(CX,CY,NL+20,n-hdg);
+    s+='<line x1="'+CX+'" y1="'+CY+'" x2="'+f(dp.x)+'" y2="'+f(dp.y)+'" style="stroke:var(--mag);stroke-width:4" stroke-linecap="round"/>';
+    s+=lbl(dt.x+9,dt.y+7,"NEEDLE",{size:9,fill:"var(--mag)",weight:600,anchor:"start"});
+    s+='<circle cx="'+CX+'" cy="'+CY+'" r="20" style="fill:var(--card);stroke:var(--line-strong);stroke-width:2"/>';
+    s+=lbl(CX,CY,"⊕",{size:15,fill:"var(--ink-3)",mono:false});
+    s+=lbl(CX,CY+34,"COMPASS",{size:9});
+    /* the radio */
+    var pp=polar(CX,CY,puck.dist,puck.bearing);
+    s+='<line x1="'+CX+'" y1="'+CY+'" x2="'+f(pp.x)+'" y2="'+f(pp.y)+'" style="stroke:var(--ink-3);stroke-width:1;opacity:.5" stroke-dasharray="3 4"/>';
+    s+='<g id="devPuck" tabindex="0" role="slider" aria-label="Radio position — arrow keys to move"'+
+       ' aria-valuenow="'+Math.round(puck.bearing)+'" style="cursor:grab;touch-action:none">'+
+       '<circle cx="'+f(pp.x)+'" cy="'+f(pp.y)+'" r="21" style="fill:var(--mag);opacity:.13"/>'+
+       '<rect x="'+f(pp.x-11)+'" y="'+f(pp.y-15)+'" width="22" height="30" rx="4" style="fill:var(--mag);stroke:var(--surface);stroke-width:2"/>'+
+       '<line x1="'+f(pp.x)+'" y1="'+f(pp.y-15)+'" x2="'+f(pp.x)+'" y2="'+f(pp.y-24)+'" style="stroke:var(--mag);stroke-width:2.5" stroke-linecap="round"/>'+
+       '</g>';
+    svg.innerHTML=svg.querySelector("title").outerHTML+s;
+
+    $("devStrengthVal").textContent = (+strEl.value===0)?"off":(+strEl.value<34?"weak":(+strEl.value<70?"medium":"strong"));
+    $("devHdgVal").textContent=deg3(hdg)+"°";
+    $("devMH").textContent=deg3(hdg)+"°";
+    $("devCH").textContent=deg3(ch)+"°";
+    var de=$("devErr"); var dr=Math.round(dev);
+    de.textContent=(dr===0?"0°":(Math.abs(dr)+"°"+(dr>0?" E":" W")));
+    de.className="rval e "+sevClass(dr);
+    /* live correction card, laid out the way the real placard is */
+    var rows=[[0,30,60,90,120,150],[180,210,240,270,300,330]], html="";
+    rows.forEach(function(set){
+      html+='<tr><th>For (MH)</th>'+set.map(function(h){
+        return "<th>"+(CARD_LBL[h].length>1||["N","E","S","W"].indexOf(CARD_LBL[h])<0?deg3(h):CARD_LBL[h])+"</th>";
+      }).join("")+"</tr>";
+      html+='<tr class="steer"><td>Steer (CH)</td>'+set.map(function(h){
+        return "<td>"+deg3(h-needle(h))+"</td>";
+      }).join("")+"</tr>";
+    });
+    $("devCard").querySelector("tbody").innerHTML=html;
+  }
+  /* pointer + keyboard control of the puck */
+  function place(cx_,cy_){
+    var dx=cx_-CX, dy=cy_-CY, d=Math.sqrt(dx*dx+dy*dy);
+    puck.dist=Math.max(42,Math.min(140,d));
+    puck.bearing=n360(Math.atan2(dx,-dy)*180/Math.PI);
+    render();
+  }
+  function toVB(e){
+    var r=svg.getBoundingClientRect();
+    return {x:(e.clientX-r.left)/r.width*560, y:(e.clientY-r.top)/r.height*340};
+  }
+  svg.addEventListener("pointerdown",function(e){
+    var t=e.target.closest?e.target.closest("#devPuck"):null;
+    var v=toVB(e), dx=v.x-CX, dy=v.y-CY;
+    if(t||Math.sqrt(dx*dx+dy*dy)>36){ dragging=true; svg.setPointerCapture(e.pointerId); place(v.x,v.y); e.preventDefault(); }
+  });
+  svg.addEventListener("pointermove",function(e){ if(dragging){var v=toVB(e); place(v.x,v.y);} });
+  svg.addEventListener("pointerup",function(e){ dragging=false; try{svg.releasePointerCapture(e.pointerId);}catch(_){} });
+  svg.addEventListener("pointercancel",function(){ dragging=false; });
+  svg.addEventListener("keydown",function(e){
+    if(!e.target.closest||!e.target.closest("#devPuck"))return;
+    var k=e.key, step=5;
+    if(k==="ArrowLeft"){puck.bearing=n360(puck.bearing-step);}
+    else if(k==="ArrowRight"){puck.bearing=n360(puck.bearing+step);}
+    else if(k==="ArrowUp"){puck.dist=Math.max(42,puck.dist-6);}
+    else if(k==="ArrowDown"){puck.dist=Math.min(140,puck.dist+6);}
+    else return;
+    e.preventDefault(); render();
+    var p=svg.querySelector("#devPuck"); if(p)p.focus();
+  });
+  strEl.addEventListener("input",render); hdgEl.addEventListener("input",render); render();
+})();
+
+/* ================= 3 · MAGNETIC DIP ================= */
+(function(){
+  var svg=$("dipSvg"), bar=$("dipBar"), latEl=$("dipLat");
+  var CX=206, CY=200, R=96;
+  function dipOf(lat){ return Math.atan(2*Math.tan(lat*Math.PI/180))*180/Math.PI; }
+  function fluxLine(L){
+    var lmax=Math.acos(Math.sqrt(1/L))*180/Math.PI, right=[], left=[];
+    for(var la=-lmax;la<=lmax+0.001;la+=2){
+      var rad=la*Math.PI/180, rr=L*Math.cos(rad)*Math.cos(rad)*R;
+      right.push(f(CX+rr*Math.cos(rad))+","+f(CY-rr*Math.sin(rad)));
+      left.push(f(CX-rr*Math.cos(rad))+","+f(CY-rr*Math.sin(rad)));
+    }
+    return '<polyline points="'+right.join(" ")+'" style="fill:none;stroke:var(--ink-3);stroke-width:1.3;opacity:.4"/>'+
+           '<polyline points="'+left.join(" ")+'" style="fill:none;stroke:var(--ink-3);stroke-width:1.3;opacity:.4"/>';
+  }
+  function render(){
+    var lat=+latEl.value, I=dipOf(lat), rad=lat*Math.PI/180, Ir=I*Math.PI/180;
+    var s='';
+    [1.45,2.1,3.1].forEach(function(L){ s+=fluxLine(L); });
+    s+='<circle cx="'+CX+'" cy="'+CY+'" r="'+R+'" style="fill:var(--sunk);stroke:var(--line-strong);stroke-width:1.5"/>';
+    s+='<line x1="'+(CX-R)+'" y1="'+CY+'" x2="'+(CX+R)+'" y2="'+CY+'" style="stroke:var(--ink-3);stroke-width:1;opacity:.5" stroke-dasharray="4 4"/>';
+    s+=lbl(CX-R+26,CY-8,"EQUATOR",{size:8.5,fill:"var(--ink-3)"});
+    s+='<line x1="'+CX+'" y1="'+(CY-R-9)+'" x2="'+CX+'" y2="'+(CY-R+5)+'" style="stroke:var(--ink-3);stroke-width:2"/>';
+    s+=lbl(CX-11,CY-R-13,"N POLE",{size:8.5,anchor:"end"});
+    /* surface point and local field */
+    var P={x:CX+R*Math.cos(rad), y:CY-R*Math.sin(rad)};
+    var north={x:-Math.sin(rad), y:-Math.cos(rad)};      /* along surface, toward the pole */
+    var down ={x:-Math.cos(rad), y: Math.sin(rad)};      /* into the ground */
+    var LEN=92, H=LEN*Math.cos(Ir), Z=LEN*Math.sin(Ir);
+    var hEnd={x:P.x+north.x*H, y:P.y+north.y*H};
+    var zEnd={x:hEnd.x+down.x*Z, y:hEnd.y+down.y*Z};
+    /* horizon at the point */
+    s+='<line x1="'+f(P.x-north.x*54)+'" y1="'+f(P.y-north.y*54)+'" x2="'+f(P.x+north.x*118)+'" y2="'+f(P.y+north.y*118)+
+       '" style="stroke:var(--ink-3);stroke-width:1;opacity:.55" stroke-dasharray="3 4"/>';
+    /* total field vector */
+    s+='<line x1="'+f(P.x)+'" y1="'+f(P.y)+'" x2="'+f(zEnd.x)+'" y2="'+f(zEnd.y)+'" style="stroke:var(--ink);stroke-width:3.5;opacity:.75" stroke-linecap="round"/>';
+    /* components */
+    s+='<line x1="'+f(P.x)+'" y1="'+f(P.y)+'" x2="'+f(hEnd.x)+'" y2="'+f(hEnd.y)+'" style="stroke:var(--true);stroke-width:5" stroke-linecap="round"/>';
+    s+='<line x1="'+f(hEnd.x)+'" y1="'+f(hEnd.y)+'" x2="'+f(zEnd.x)+'" y2="'+f(zEnd.y)+'" style="stroke:var(--mag);stroke-width:5" stroke-linecap="round"/>';
+    s+='<line x1="'+f(P.x)+'" y1="'+f(P.y)+'" x2="'+f(zEnd.x)+'" y2="'+f(zEnd.y)+'" style="stroke:var(--ink);stroke-width:1;opacity:.35" stroke-dasharray="3 3"/>';
+    s+='<circle cx="'+f(P.x)+'" cy="'+f(P.y)+'" r="5.5" style="fill:var(--ink);stroke:var(--surface);stroke-width:2"/>';
+    s+=lbl(hEnd.x+north.x*22+12,hEnd.y+north.y*22,"HORIZONTAL",{size:9,fill:"var(--true)",weight:600,anchor:"start"});
+    s+=lbl(zEnd.x+14,zEnd.y+10,"VERTICAL",{size:9,fill:"var(--mag)",weight:600,anchor:"start"});
+    /* dip angle arc */
+    if(I>2){
+      var a0=Math.atan2(north.x,-north.y)*180/Math.PI;
+      var a1=Math.atan2(zEnd.x-P.x,-(zEnd.y-P.y))*180/Math.PI;
+      s+='<path d="'+arcPath(P.x,P.y,40,a0,a1)+'" style="fill:none;stroke:var(--ink);stroke-width:1.5;opacity:.6"/>';
+      var mid=polar(P.x,P.y,54,(a0+a1)/2);
+      s+=lbl(mid.x,mid.y,Math.round(I)+"°",{size:12,fill:"var(--ink)",weight:600,ls:"0"});
+    }
+    s+=lbl(P.x+north.x*-34+18,P.y+north.y*-34,lat+"° N",{size:11,fill:"var(--ink-2)",weight:600,anchor:"start"});
+    svg.innerHTML=svg.querySelector("title").outerHTML+s;
+
+    /* two honest bars: each component as a fraction of total field strength */
+    var hFrac=Math.cos(Ir), zFrac=Math.sin(Ir), W=250, X=104;
+    var b='';
+    [["HORIZONTAL",hFrac,"var(--true)",14],["VERTICAL",zFrac,"var(--mag)",42]].forEach(function(row){
+      b+=lbl(X-10,row[3],row[0],{anchor:"end",size:9,fill:"var(--ink-3)"});
+      b+='<rect x="'+X+'" y="'+(row[3]-7)+'" width="'+W+'" height="14" rx="4" style="fill:var(--sunk);stroke:var(--line)"/>';
+      if(row[1]>0.005) b+='<rect x="'+X+'" y="'+(row[3]-7)+'" width="'+f(Math.max(4,W*row[1]))+'" height="14" rx="4" style="fill:'+row[2]+'"/>';
+      b+=lbl(X+W+9,row[3],Math.round(row[1]*100)+"%",{anchor:"start",size:11,fill:"var(--ink-2)",weight:600,ls:"0"});
+    });
+    bar.innerHTML=b;
+
+    $("dipLatVal").textContent=lat+"° N";
+    $("dipAngle").textContent=Math.round(I)+"°";
+    $("dipHoriz").textContent=Math.round(hFrac*100)+"%";
+    var v;
+    if(lat<=4) v="<b>At the magnetic equator the field runs flat along the ground.</b> Dip is zero, the card hangs perfectly level, and northerly turning and acceleration errors do not exist at all.";
+    else if(lat<=25) v="Dip is mild. The card tips a little, so turning and acceleration errors exist but stay small — a few degrees.";
+    else if(lat<=50) v="<b>Typical of the continental U.S.</b> The field is steeply inclined and the card is noticeably tipped — turning and acceleration errors of tens of degrees.";
+    else if(lat<=65) v="High latitude. Most of the field is now pulling the card straight down, and only a shrinking fraction is left to point it north.";
+    else v="<b>Near the magnetic pole the compass is effectively unusable.</b> Almost nothing is left to turn the card toward north, and it will swing wildly at the slightest disturbance.";
+    $("dipVerdict").innerHTML=v;
+  }
+  latEl.addEventListener("input",render); render();
+})();
+
+/* latitude is shared across dip, turning and acceleration — changing one moves all three */
+var LAT_SYNC=[];
+function syncLat(v,from){
+  LAT_SYNC.forEach(function(m){ if(m.el!==from && +m.el.value!==v){ m.el.value=v; m.render(); } });
+}
+
+/* ---------- shared error-vs-heading plot ---------- */
+function makePlot(svgEl, fn, getHdg, setHdg){
+  var L=32,T=18,W=352,H=106;
+  var YMAX=70;
+  function X(t){return L+t/360*W;}
+  function Y(e){return T+H/2-Math.max(-YMAX,Math.min(YMAX,e))/YMAX*(H/2);}
+  function draw(){
+    var cur=getHdg(), s='';
+    s+='<rect x="'+L+'" y="'+T+'" width="'+W+'" height="'+H+'" rx="3" style="fill:var(--sunk);stroke:var(--line)"/>';
+    [-35,35].forEach(function(g){ s+='<line x1="'+L+'" y1="'+f(Y(g))+'" x2="'+(L+W)+'" y2="'+f(Y(g))+'" style="stroke:var(--line);stroke-width:1;opacity:.7"/>'; });
+    [90,180,270].forEach(function(t){ s+='<line x1="'+f(X(t))+'" y1="'+T+'" x2="'+f(X(t))+'" y2="'+(T+H)+'" style="stroke:var(--line);stroke-width:1;opacity:.7"/>'; });
+    s+='<line x1="'+L+'" y1="'+f(Y(0))+'" x2="'+(L+W)+'" y2="'+f(Y(0))+'" style="stroke:var(--line-strong);stroke-width:1.5"/>';
+    var pts=[];
+    for(var t=0;t<=360;t+=3) pts.push(f(X(t))+","+f(Y(fn(t))));
+    s+='<polyline points="'+pts.join(" ")+'" style="fill:none;stroke:var(--mag);stroke-width:2;opacity:.95" stroke-linejoin="round" stroke-linecap="round"/>';
+    var e=fn(cur), cx=X(cur), cy=Y(e);
+    s+='<line x1="'+f(cx)+'" y1="'+T+'" x2="'+f(cx)+'" y2="'+(T+H)+'" style="stroke:var(--true);stroke-width:1.5;opacity:.8" stroke-dasharray="3 3"/>';
+    s+='<circle cx="'+f(cx)+'" cy="'+f(cy)+'" r="5.5" style="fill:var(--mag);stroke:var(--card);stroke-width:2"/>';
+    var side=cur>250?"end":"start", ox=cur>250?-11:11;
+    s+=lbl(cx+ox,cy-14,(e>0?"+":"")+Math.round(e)+"°",{anchor:side,size:11.5,weight:600,fill:"var(--mag)",ls:"0"});
+    ["N","E","S","W","N"].forEach(function(t,i){ s+=lbl(X(i*90),T+H+13,t,{size:10}); });
+    s+=lbl(L+5,T+11,"+"+YMAX+"° READS HIGH",{anchor:"start",size:8.5,fill:"var(--ink-3)"});
+    s+=lbl(L+5,T+H-9,"−"+YMAX+"° READS LOW",{anchor:"start",size:8.5,fill:"var(--ink-3)"});
+    svgEl.innerHTML=s;
+  }
+  var drag=false;
+  function scrub(e){
+    var r=svgEl.getBoundingClientRect();
+    var t=((e.clientX-r.left)/r.width*400-L)/W*360;
+    setHdg(Math.max(0,Math.min(359,Math.round(t))));
+  }
+  svgEl.style.touchAction="none"; svgEl.style.cursor="ew-resize";
+  svgEl.addEventListener("pointerdown",function(e){drag=true;svgEl.setPointerCapture(e.pointerId);scrub(e);e.preventDefault();});
+  svgEl.addEventListener("pointermove",function(e){if(drag)scrub(e);});
+  svgEl.addEventListener("pointerup",function(e){drag=false;try{svgEl.releasePointerCapture(e.pointerId);}catch(_){}});
+  svgEl.addEventListener("pointercancel",function(){drag=false;});
+  return draw;
+}
+
+/* ================= 4 · NORTHERLY TURNING ERROR ================= */
+(function(){
+  var svg=$("turnSvg"), hEl=$("turnHdg"), bEl=$("turnBank"), lEl=$("turnLat");
+  var K=Math.sin(30*Math.PI/180);
+  function err(hdg){
+    return -(+lEl.value)*Math.cos(hdg*Math.PI/180)*Math.sin((+bEl.value)*Math.PI/180)/K;
+  }
+  var plot=makePlot($("turnPlot"), err, function(){return +hEl.value;}, function(v){hEl.value=v;render();});
+  function render(){
+    var hdg=+hEl.value, bank=+bEl.value, lat=+lEl.value;
+    var e=err(hdg), ind=n360(hdg+e);
+    var s=acRear(108,150,bank,1)+
+      lbl(108,214,bank===0?"WINGS LEVEL":(Math.abs(bank)+"° BANK "+(bank>0?"RIGHT":"LEFT")),{size:10,fill:"var(--ink-2)",weight:600})+
+      lbl(108,232,"LOOKING FORWARD",{size:8.5})+
+      compass(352,170,112,hdg,ind);
+    svg.innerHTML=svg.querySelector("title").outerHTML+s;
+    $("turnHdgVal").textContent=deg3(hdg)+"°";
+    $("turnBankVal").textContent=bank===0?"level":(Math.abs(bank)+"° "+(bank>0?"right":"left"));
+    $("turnLatVal").textContent=lat+"° N";
+    $("turnAct").textContent=deg3(hdg)+"°";
+    $("turnInd").textContent=deg3(ind)+"°";
+    var er=$("turnErr"), r=Math.round(e), northerly=Math.cos(hdg*Math.PI/180)>0;
+    er.innerHTML = r===0 ? "0°" : Math.abs(r)+'°<span class="rsuffix">'+(northerly?"LAGGING":"LEADING")+"</span>";
+    er.className="rval e "+sevClass(r);
+    $("turnRule").textContent=lat+"°";
+    plot();
+  }
+  [hEl,bEl].forEach(function(el){el.addEventListener("input",render);});
+  lEl.addEventListener("input",function(){render();syncLat(+lEl.value,lEl);});
+  LAT_SYNC.push({el:lEl,render:render});
+  render();
+})();
+
+/* ================= 5 · ACCELERATION ERROR ================= */
+(function(){
+  var svg=$("accSvg"), hEl=$("accHdg"), aEl=$("accRate"), lEl=$("accLat");
+  function err(hdg){ return -(+lEl.value)*Math.sin(hdg*Math.PI/180)*(+aEl.value/100); }
+  var plot=makePlot($("accPlot"), err, function(){return +hEl.value;}, function(v){hEl.value=v;render();});
+  function render(){
+    var hdg=+hEl.value, a=+aEl.value/100, lat=+lEl.value;
+    var e=err(hdg), ind=n360(hdg+e);
+    var s=acSide(112,150,1);
+    /* speed arrows: forward when accelerating, backward when slowing */
+    if(Math.abs(a)>0.03){
+      var dir=a>0?1:-1, base=a>0?152:56, col=a>0?"var(--ok)":"var(--warn)";
+      for(var i=0;i<3;i++){
+        var x=base+dir*i*22, len=dir*15;
+        s+='<line x1="'+f(x)+'" y1="'+(150+(i-1)*17)+'" x2="'+f(x+len)+'" y2="'+(150+(i-1)*17)+
+           '" style="stroke:'+col+';stroke-width:3;opacity:'+(1-i*0.22)+'" stroke-linecap="round"/>';
+        s+='<path d="M '+f(x+len)+' '+(150+(i-1)*17-5)+' l '+f(dir*7)+' 5 l '+f(-dir*7)+' 5 Z" style="fill:'+col+';opacity:'+(1-i*0.22)+'"/>';
+      }
+      s+=lbl(112,222,a>0?"SPEEDING UP":"SLOWING DOWN",{size:10,fill:col,weight:600});
+    } else {
+      s+=lbl(112,222,"STEADY AIRSPEED",{size:10,fill:"var(--ink-2)",weight:600});
+    }
+    s+=lbl(112,240,"WINGS LEVEL · HEADING CONSTANT",{size:8.5});
+    s+=compass(352,170,112,hdg,ind);
+    svg.innerHTML=svg.querySelector("title").outerHTML+s;
+    $("accHdgVal").textContent=deg3(hdg)+"°";
+    $("accRateVal").textContent=Math.abs(a)<0.04?"steady":(a>0?"accelerating":"decelerating");
+    $("accLatVal").textContent=lat+"° N";
+    $("accAct").textContent=deg3(hdg)+"°";
+    $("accInd").textContent=deg3(ind)+"°";
+    var er=$("accErr"), r=Math.round(e);
+    er.innerHTML = r===0 ? "none" : Math.abs(r)+'°<span class="rsuffix">TOWARD '+(a>0?"NORTH":"SOUTH")+"</span>";
+    er.className="rval e "+sevClass(r);
+    plot();
+  }
+  [hEl,aEl].forEach(function(el){el.addEventListener("input",render);});
+  lEl.addEventListener("input",function(){render();syncLat(+lEl.value,lEl);});
+  LAT_SYNC.push({el:lEl,render:render});
+  render();
+})();
+
+/* ================= 6 · OSCILLATION ================= */
+(function(){
+  var svg=$("oscSvg"), tEl=$("oscTurb"), ACT=270, t0=performance.now();
+  function amp(){ return (+tEl.value/100)*36; }
+  function offset(ms){
+    var T=ms/1000;
+    return (0.62*Math.sin(2.1*T)+0.40*Math.sin(3.7*T+1.3)+0.26*Math.sin(6.3*T+2.6))/1.28;
+  }
+  function frame(now){
+    var A=amp(), off=REDUCED?0.72:offset(now-t0), ind=n360(ACT+A*off);
+    var s=acRear(108,150,REDUCED?0:A*off*0.5,1)+
+      lbl(108,214,A<1?"SMOOTH AIR":"TURBULENCE",{size:10,fill:A<1?"var(--ok)":"var(--warn)",weight:600})+
+      compass(352,170,112,ACT,ind);
+    if(A>1){
+      var lo=n180(ACT-A-ind), hi=n180(ACT+A-ind);
+      s+='<path d="'+wedge(352,170,114,127,lo,hi)+'" style="fill:var(--mag);opacity:.2"/>';
+    }
+    svg.innerHTML=svg.querySelector("title").outerHTML+s;
+    $("oscInd").textContent=deg3(ind)+"°";
+    var sw=$("oscSwing"), r=Math.round(A*2);
+    sw.textContent = r<2 ? "steady" : "±"+Math.round(A)+"°";
+    sw.className="rval e "+sevClass(A);
+    $("oscTurbVal").textContent = A<1?"smooth":(A<12?"light chop":(A<26?"moderate":"severe"));
+    if(!REDUCED) requestAnimationFrame(frame);
+  }
+  tEl.addEventListener("input",function(){ if(REDUCED) frame(performance.now()); });
+  if(REDUCED) frame(performance.now()); else requestAnimationFrame(frame);
+})();
+
+})();
+</script>
